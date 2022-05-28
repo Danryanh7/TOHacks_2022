@@ -8,7 +8,7 @@ import vision.vision as vision
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'np'
 
-camera = cv2.VideoCapture(-1)
+camera = cv2.VideoCapture(0)
 fitnessVision = vision.FitnessVision()
 
 @app.route('/video_feed', methods=["POST", "GET"])

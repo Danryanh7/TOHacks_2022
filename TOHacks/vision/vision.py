@@ -6,6 +6,8 @@ import timeit
 #import PoseModule as pm
 
 PUSH_UP = 0
+BICEP_CURL = 1
+SQUAT = 2
 
 global port
 port = 0
@@ -34,6 +36,20 @@ class FitnessVision:
         self.startTime = 0
         self.endTime = 100
 
+    def setExercise(self, exercise):
+        if exercise == PUSH_UP:
+            self.pushUp = True
+            self.bicepCurl = False
+            self.squat = False
+        elif exercise == BICEP_CURL:
+            self.bicepCurl = True
+            self.pushUp = False
+            self.squat = False
+        else:
+            self.squat = True
+            self.bicepCurl = False
+            self.pushUp = False
+
     def still(self, camera):
         while True:
             success, img = camera.read()
@@ -60,28 +76,28 @@ class FitnessVision:
                         cv2.putText(img, str("INCORRECT FORM"), (50, 100), cv2.FONT_HERSHEY_PLAIN, 5,
                         (255, 0, 0), 5)
 
-                #if self.bicepCurl == True:
-                #    self.final = 55
-                #    self.intial = 150
-                #    self.angle = self.detector.findAngle(img, 12, 14, 16)
-#
-                #    # Form correction
-                #    self.currentForm = self.detector.findAngle(img, 12, 24, 26)
-                #    if self.currentForm > 195:
-                #        cv2.putText(img, str("INCORRECT FORM"), (50, 100), cv2.FONT_HERSHEY_PLAIN, 5,
-                #        (255, 0, 0), 5)
-#
-                #if self.squat == True:
-                #    self.final = 85
-                #    self.intial = 0
-                #   # self.backAngle = self.detector.findAngle(img, 11, 23, 25)
-                #    self.angle = abs(180 - self.detector.findAngle(img, 24, 26, 28))
-#
-                #    # Form correction
-                #    self.currentForm = self.detector.findAngle(img, 12, 24, 26)
-                #    if self.currentForm > 190 or self.currentForm < 160:
-                #        cv2.putText(img, str("INCORRECT FORM"), (50, 100), cv2.FONT_HERSHEY_PLAIN, 5,
-                #        (255, 0, 0), 5)
+                if self.bicepCurl == True:
+                    self.final = 55
+                    self.intial = 150
+                    self.angle = self.detector.findAngle(img, 12, 14, 16)
+
+                    # Form correction
+                    self.currentForm = self.detector.findAngle(img, 12, 24, 26)
+                    if self.currentForm > 195:
+                        cv2.putText(img, str("INCORRECT FORM"), (50, 100), cv2.FONT_HERSHEY_PLAIN, 5,
+                        (255, 0, 0), 5)
+
+                if self.squat == True:
+                    self.final = 85
+                    self.intial = 0
+                   # self.backAngle = self.detector.findAngle(img, 11, 23, 25)
+                    self.angle = abs(180 - self.detector.findAngle(img, 24, 26, 28))
+
+                    # Form correction
+                    self.currentForm = self.detector.findAngle(img, 12, 24, 26)
+                    if self.currentForm > 190 or self.currentForm < 160:
+                        cv2.putText(img, str("INCORRECT FORM"), (50, 100), cv2.FONT_HERSHEY_PLAIN, 5,
+                        (255, 0, 0), 5)
 
                 per = np.interp(self.angle, (self.final, self.initial), (100, 0))
                 bar = np.interp(self.angle, (self.final, self.initial), (100, 650))
